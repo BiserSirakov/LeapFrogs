@@ -1,64 +1,55 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace LeapFrogs
 {
     public class GameState
     {
-        public string Current { get; set; }
+        private string _value;
+        private int _numberOfFrogsOnEachSide;
+        private IList<GameState> _nextGameStates;
 
-        public string InitialState { get; set; }
-
-        public string GoalState { get; set; }
-
-        public GameState(int numberOfFrogsOnEachSide)
+        public GameState(string value, int numberOfFrogsOnEachSide)
         {
-            this.Current = GetInitialState(numberOfFrogsOnEachSide);
-
-            this.InitialState = GetInitialState(numberOfFrogsOnEachSide);
-            this.GoalState = GetGoalState(numberOfFrogsOnEachSide);
+            _value = value;
+            _numberOfFrogsOnEachSide = numberOfFrogsOnEachSide;
+            _nextGameStates = new List<GameState>();
         }
 
-        public bool IsGoalState() => 
-            this.Current == this.GoalState;
+        public IList<GameState> NextGameStates => _nextGameStates;
 
-        private string GetInitialState(int numberOfFrogsOnEachSide)
+        /// <summary>
+        /// Generate game states recursively until the goal state is reached.
+        /// </summary>
+        public void GenerateNextStates()
+        {
+            if (_value == GetGoalState()._value)
+                return;
+
+
+        }   
+
+        private GameState GetGoalState()
         {
             StringBuilder sb = new StringBuilder();
-            var numberOfPositions = numberOfFrogsOnEachSide * 2 + 1;
+            var numberOfPositions = _numberOfFrogsOnEachSide * 2 + 1;
 
             for (int i = 0; i < numberOfPositions; i++)
             {
-                if (i < numberOfFrogsOnEachSide)
-                    sb.Append('>');
-
-                else if (i == numberOfFrogsOnEachSide)
-                    sb.Append('_');
-
-                else if (i > numberOfFrogsOnEachSide)
-                    sb.Append('<');
-            }
-
-            return sb.ToString();
-        }
-
-        private string GetGoalState(int numberOfFrogsOnEachSide)
-        {
-            StringBuilder sb = new StringBuilder();
-            var numberOfPositions = numberOfFrogsOnEachSide * 2 + 1;
-
-            for (int i = 0; i < numberOfPositions; i++)
-            {
-                if (i < numberOfFrogsOnEachSide)
+                if (i < _numberOfFrogsOnEachSide)
                     sb.Append('<');
 
-                else if (i == numberOfFrogsOnEachSide)
+                else if (i == _numberOfFrogsOnEachSide)
                     sb.Append('_');
 
-                else if (i > numberOfFrogsOnEachSide)
+                else if (i > _numberOfFrogsOnEachSide)
                     sb.Append('>');
             }
 
-            return sb.ToString();
+            return new GameState(sb.ToString(), _numberOfFrogsOnEachSide);
         }
+
+        public override string ToString() => _value;
     }
 }

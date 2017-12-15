@@ -7,16 +7,8 @@ namespace LeapFrogs
         public static void Main()
         {
             var numberOfFrogsOnEachSide = GetNumberOfFrogsOnEachSide();
-
-            // create a Tree<GameStates> with all moves from the given numberOfFrogsOnEachSide
-
-            // search for the goal state using DFS
-            // write to the console the states
-        }
-
-        private static void DFS(Tree<GameState> tree)
-        {
-
+            var tree = new GameStateTree(numberOfFrogsOnEachSide);
+            tree.PrintDFS();
         }
 
         private static int GetNumberOfFrogsOnEachSide()
